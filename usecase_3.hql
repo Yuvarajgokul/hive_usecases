@@ -60,7 +60,17 @@ from cust_delimited_parsed_temp table
 hive (custdb)> insert into cust_parsed_orc partition (dt)
              > select id,name,city,age,amt,dt from cust_delimited_parsed_temp where city='chennai';
 
-             
+Create a json table called cust_parsed_json (to load into a json format using the following steps). 
+
+ hive (custdb)> create external table cust_parsed_json(id int, name string,city string, age int) 
+             > ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe' 
+             > location '/user/hduser/custjson';            
+
+Insert into the cust_parsed_json only non chennai data using  
+insert select of id,name,city, age from the cust_delimited_parsed_temp table and verify the 
+data in the /user/hduser/custjson should be in json format.
+
+hive (custdb)> Insert into cust_parsed_json select id,name,city,age from cust_delimited_parsed_temp; 
 
 
 
