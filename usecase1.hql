@@ -80,3 +80,4 @@ group by profession, agecat, current_date();
 
 
 
+
