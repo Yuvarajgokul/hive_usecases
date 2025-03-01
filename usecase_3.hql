@@ -72,5 +72,15 @@ data in the /user/hduser/custjson should be in json format.
 
 hive (custdb)> Insert into cust_parsed_json select id,name,city,age from cust_delimited_parsed_temp; 
 
+Create another json table called cust_parsed_complex_json (to load into a json format using the 
+following steps). 
+
+hive (custdb)> create external table cust_parsed_json(id int, name string,city string, age int) 
+             > ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe' 
+             > location '/user/hduser/cust_complex_json';
+
+hive (custdb)> Insert into cust_parsed_json select id,name,city,age from cust_delimited_parsed_temp; 
+
+hive (custdb)> selece * id, name, mis_info.city, mis_info.age fromcust_parsed_complex_json; 
 
 
