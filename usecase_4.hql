@@ -107,5 +107,5 @@ Import the Customer data into hdfs using sqoop import with 3 mappers into
              > location '/user/hduser/customeravro'  
              > TBLPROPERTIES('avro.schema.url'='hdfs:///tmp/customer.avsc'); 
 
-hive (custdb)> load data inpath '/user/hduser/custavro' into table customeravro;;
+hive (custdb)> load data inpath '/user/hduser/custavro' into table customeravro;
 
