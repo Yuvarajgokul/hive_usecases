@@ -1,0 +1,25 @@
+# Importing data from MySql data base to Datalake transient Zone: 
+
+[hduser@localhost ~]$sqoop --options-file /home/hduser/retailorders/custoption --password-file 
+/user/hduser/retailorders/root.password --boundary-query " select min(customerNumber), 
+max(customerNumber) from payments " --query ' select c.customerNumber,
+upper(c.customerName),c.contactFirstName,c.contactLastName,c.phone,c.addressLine1,c.city,c.state,c.postalCode,c.country ,c.salesRepEmployeeNumber,c.creditLimit ,p.checknumber,p.paymentdate,p.amount  from 
+customers c inner join payments p on c.customernumber=p.customernumber and year(p.paymentdate)=2020 
+and month(p.paymentdate)=10 where $CONDITIONS' \ --split-by c.customernumber --delete-target-dir 
+--target-dir custdetails/2020-10/ --null-string 'NA' \ --direct --num-mappers 2
+--fields-terminated-by '~' --lines-terminated-by '\n';  
+
+
+[hduser@localhost ~]$ sqoop --options-file /home/hduser/retailorders/ordersoption --password-file /user/hduser/retailorders/root.password
+--boundary-query "select min(customerNumber),max(customerNumber) from orders" 
+--query 'select o.customerNumber,o.ordernumber,o.orderdate,o.shippeddate,o.status,o.comments,od.productcode,od.quantityOrdered,od.priceeach,od.orderlinenumber,p.productCode,p.productName,p.productLine,p.productScale,p.productVendor,p.productDescription,p.quantityInStock,p.buyPrice,p.MSRP  
+from orders o inner join orderdetails od on o.ordernumber=od.ordernumber  inner join products p on od.productCode=p.productCode
+and year(o.orderdate)=2020 and month(o.orderdate)=10 where $CONDITIONS'
+--split-by o.customernumber --delete-target-dir --target-dir orderdetails/2020-10/
+--null-string 'NA' --direct --num-mappers 4 --fields-terminated-by '~' --lines-terminated-by '\n';
+
+
+
+
+
+
